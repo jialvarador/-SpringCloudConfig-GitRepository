@@ -8,6 +8,13 @@ eureka:
       
 foo: baz
 
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost/
+    username: postgres
+    password: 1234
+    driver-class-name: org.postgresql.Driver
 ---
 spring:
   profiles: cloud
