@@ -15,6 +15,8 @@ spring:
     username: postgres
     password: 1234
     driver-class-name: org.postgresql.Driver
+    
+    
 ---
 spring:
   profiles: cloud
@@ -63,3 +65,15 @@ eureka:
     serviceUrl:
       defaultZone: http://${EUREKA_1_PORT_8761_TCP_ADDR:localhost}:8761/eureka/
 
+
+
+security:
+  oauth2:
+    client:
+      client-id: myclient
+      client-secret: mysecret
+      access-token-uri: http://127.0.0.1:9999/oauth/token
+      user-authorization-uri: http://127.0.0.1:9999/oauth/authorize
+    resource:
+      user-info-uri: http://127.0.0.1:9999/me
+      token-info-uri: http://127.0.0.1:9999/oauth/check_token
