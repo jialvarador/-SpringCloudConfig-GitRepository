@@ -1,21 +1,23 @@
 info:
-  description: Spring Cloud Samples
-  url: https://github.com/spring-cloud-samples
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
-      
-foo: baz
+  app:
+    name: "spring-cloud-dataflow-server"
+    description: "Spring Cloud Data Flow Server"
+    version: "2.1.0.RELEASE"
+#server:
+#  port: 8443
+#  ssl:
+#    enabled: true
+#    key-alias: dataflow
+#    key-store: "/your/path/to/dataflow.keystore"
+#    key-store-type: jks
+#    key-store-password: dataflow
+#    key-password: dataflow
 
----
-spring:
-  profiles: cloud
-  cloud:
-    config:
-      uri: ${vcap.services.${PREFIX:}configserver.credentials.uri:http://user:password@${PREFIX:}configserver.${application.domain:cfapps.io}}
-oauth2:
-   client:
+# Security (Oauth 2):
+
+security:
+  oauth2:
+    client:
       client-id: myclient
       client-secret: mysecret
       access-token-uri: http://127.0.0.1:9999/oauth/token
@@ -23,35 +25,19 @@ oauth2:
     resource:
       user-info-uri: http://127.0.0.1:9999/me
       token-info-uri: http://127.0.0.1:9999/oauth/check_token
-application:
-  domain: ${APPLICATION_DOMAIN:cfapps.io}
-endpoints:
-  restart: enabled
-eureka:
-  password: password
-  instance:
-    hostname: ${vcap.application.uris[0]:localhost}
-    nonSecurePort: 80
-  client:
-    serviceUrl:
-      defaultZone: ${vcap.services.${PREFIX:}eureka.credentials.uri:http://user:${eureka.password:}@${PREFIX:}eureka.${application.domain:cfapps.io}}/eureka/
-hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 60000
-ribbon:
-  ConnectTimeout: 3000
-  ReadTimeout: 60000
 
----
-spring:
-  profiles: docker
-  cloud:
-    config:
-      uri: http://${CONFIGSERVER_1_PORT_8888_TCP_ADDR:localhost}:8888
-endpoints:
-  restart: enabled
-eureka:
-  instance:
-    nonSecurePort: 80
-    preferIpAddress: true
-  client:
-    serviceUrl:
-      defaultZone: http://${EUREKA_1_PORT_8761_TCP_ADDR:localhost}:8761/eureka/
+# If you prefer to use Eureka to locate the Config Server, you can do that by setting
+# spring.cloud.config.discovery.enabled=true (default "false"). The net result of that is
+# that client apps all need a bootstrap.yml (or an environment variable) with the Eureka
+# server address, e.g. in eureka.client.serviceUrl.defaultZone
+#
+#---
+#spring:
+#  cloud:
+#     config:
+#        discovery:
+#           enabled: true
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: http://localhost:8761/eureka/
